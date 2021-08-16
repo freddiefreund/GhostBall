@@ -11,6 +11,7 @@ public class CameraController : MonoBehaviour
     void Start()
     {
         Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     void Update()
@@ -24,9 +25,14 @@ public class CameraController : MonoBehaviour
 
         transform.position = transform.position = playerTransform.position;
 
-        if (Input.GetKey(KeyCode.Q))
+        if (Input.GetKeyDown(KeyCode.Q))
         {
             Cursor.visible = !Cursor.visible;
+
+            if (Cursor.lockState == CursorLockMode.Locked)
+                Cursor.lockState = CursorLockMode.None;
+            else if (Cursor.lockState == CursorLockMode.None)
+                Cursor.lockState = CursorLockMode.Locked;
         }
     }
 }
