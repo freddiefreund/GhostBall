@@ -1,20 +1,33 @@
 using System.Collections;
 using System.Collections.Generic;
-using Cinemachine;
-using Mirror;
 using UnityEngine;
 
-public class CameraController : NetworkBehaviour
+public class CameraController : MonoBehaviour
 {
-    [SerializeField] private Vector2 maxFollowOffset = new Vector2(-1f, 6f);
-    [SerializeField] private Vector2 cameraVelocity = new Vector2(4f, 0.25f);
-    [SerializeField] private Transform playerTransform = null;
-    [SerializeField] private GameObject camera;
+    [SerializeField] float mouseSensitivity;
+    [SerializeField] Transform playerTransform;
+    [SerializeField] Transform childTransform;
 
-    public override void OnStartAuthority()
+    void Start()
     {
-        camera.SetActive(true);
+        Cursor.visible = false;
+    }
 
-        enabled = true;
+    void Update()
+    {
+        float horizontal_axis = Input.GetAxis("Mouse X") * mouseSensitivity;
+        float vertical_axis = Input.GetAxis("Mouse Y") * mouseSensitivity;
+
+        playerTransform.eulerAngles = new Vector3(playerTransform.eulerAngles.x, playerTransform.eulerAngles.y + horizontal_axis, 0);
+        transform.rotation = playerTransform.rotation;
+        childTransform.localEulerAngles = new Vector3(childTransform.localEulerAngles.x - vertical_axis, childTransform.localEulerAngles.y, 0);
+
+        transform.position = transform.position = playerTransform.position;
+
+        if (Input.GetKey(KeyCode.Q))
+        {
+            Cursor.visible = !Cursor.visible;
+        }
     }
 }
+
